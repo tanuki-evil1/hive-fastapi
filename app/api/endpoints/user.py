@@ -20,3 +20,8 @@ async def login():
 @router.post("/logout")
 async def logout():
     pass
+
+
+@router.get("/protected")
+async def protected_endpoint(current_user: str = Depends(get_current_user)):
+    return {"message": f"Hello, {current_user}! You are authenticated."}

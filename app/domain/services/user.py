@@ -11,9 +11,3 @@ class UserService:
 
     def update_user_data(self, username, data):
         return self.ad_client.update_user_data(username, data)
-
-    async def authenticate_user(self, email: EmailStr, password: str):
-        user = await UserDAO.find_one_or_none(email=email)
-        if not (user and verify_password(password, user.hashed_password)):
-            raise IncorrectEmailOrPasswordException
-        return user

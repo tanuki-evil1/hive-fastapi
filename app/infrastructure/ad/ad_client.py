@@ -22,10 +22,13 @@ class ADClient:
                 return conn.entries[0].entry_attributes_as_dict
             return None
 
-    # def update_user_data(self, username, data):
-    #     with self.connect() as conn:
-    #         dn = f'cn={username},dc={settings.AD_DOMAIN},dc={settings.AD_SUFFIX}'
-    #         modifications = {key: [(MODIFY_REPLACE, [value])] for key, value in data.items()}
-    #         conn.modify(dn, modifications)
-    #         return conn.result
 
+    async def authenticate(self, username: str, password: str) -> bool:
+        try:
+            user_dn = f"{settings.LDAP_USER_DN}\\{username}"
+            with Connection(self.server, user=user_dn, password=password, authentication=NTLM) as conn:
+                if conn.bind():
+                    return True
+        except Exception as e:
+            print(f"LDAP Authentication error: {e}")
+        return False

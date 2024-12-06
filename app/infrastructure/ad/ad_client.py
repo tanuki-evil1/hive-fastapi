@@ -22,13 +22,8 @@ class ADClient:
                 return conn.entries[0].entry_attributes_as_dict
             return None
 
-
-    async def authenticate(self, username: str, password: str) -> bool:
-        try:
-            user_dn = f"{settings.LDAP_USER_DN}\\{username}"
-            with Connection(self.server, user=user_dn, password=password, authentication=NTLM) as conn:
-                if conn.bind():
-                    return True
-        except Exception as e:
-            print(f"LDAP Authentication error: {e}")
-        return False
+    def authenticate(self) -> bool:
+        with self.connect() as conn:
+            if conn.bind():
+                return True
+            return False

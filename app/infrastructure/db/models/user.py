@@ -1,18 +1,13 @@
-class User(AbstractUser):
-    first_name = models.CharField(
-        verbose_name=_('First name'),
-        max_length=50,
-        blank=True, null=True
-    )
-    last_name = models.CharField(
-        verbose_name=_('Last name'),
-        max_length=50,
-        blank=True, null=True
-    )
+from sqlalchemy.orm import mapped_column, Mapped
 
-    def __str__(self):
-        return self.username
+from app.db import Base
 
-    class Meta:
-        verbose_name = _('User')
-        verbose_name_plural = _('Users')
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    first_name: Mapped[str]
+    last_name: Mapped[str]
+    email: Mapped[str]
+    password: Mapped[str]
